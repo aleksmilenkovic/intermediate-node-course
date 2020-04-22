@@ -7,6 +7,8 @@ const User = require("./models/User");
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useCreateIndex", true);
 mongoose.set("useUnifiedTopology", true);
+mongoose.set('useFindAndModify', false);
+
 
 mongoose.connect("mongodb://localhost/userData");
 
@@ -93,6 +95,26 @@ app
      )
   })
   // DELETE
-  .delete((req, res) => {
-    // User.findByIdAndDelete()
-  });
+  .delete((req,res)=>{
+    User.findByIdAndDelete(
+      req.params.id,
+      (err,data)=>{
+        if (err){
+          res.json({
+            success: false,
+            message: err
+          })
+        } else if (!data){
+          res.json({
+            success: false,
+            message: "Not Found"
+          })
+        } else {
+          res.json({
+            success: true,
+            data: data
+          })
+        }
+      }
+    )
+  })
