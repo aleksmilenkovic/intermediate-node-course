@@ -20,48 +20,77 @@ app.listen(port, () => {
 app.post("/users", (req, res) => {
   User.create(
     {
-      name:req.body.newData.name,
-      email:req.body.newData.email,
-      password:req.body.newData.password
+      name: req.body.newData.name,
+      email: req.body.newData.email,
+      password: req.body.newData.password,
     },
-    (err,data)=>{
-      if(err){
-        res.json({succsess:false, message: err})
-      }else if (!data){
-        res.json({succsess:false, message: "Not Found"})
+    (err, data) => {
+      if (err) {
+        res.json({ succsess: false, message: err });
+      } else if (!data) {
+        res.json({ succsess: false, message: "Not Found" });
       } else {
-        res.json({succsess:true, data:data})
+        res.json({ succsess: true, data: data });
       }
     }
   );
 });
 
 app
-.route("/users/:id")
+  .route("/users/:id")
   // READ
   .get((req, res) => {
-     User.findById(req.params.id, (err,data)=>{
-       if(err){
-         res.json({
-           success:false,
-           message:err
-         })
-       } else if(!data){
-         res.json({
-           success:false,
-           message: "Not Found"
-         })
-       } else {
-         res.json({
-           success:true,
-           data:data
-         })
-       }
-     })
+    User.findById(req.params.id, (err, data) => {
+      if (err) {
+        res.json({
+          success: false,
+          message: err,
+        });
+      } else if (!data) {
+        res.json({
+          success: false,
+          message: "Not Found",
+        });
+      } else {
+        res.json({
+          success: true,
+          data: data,
+        });
+      }
+    });
   })
   // UPDATE
   .put((req, res) => {
-    // User.findByIdAndUpdate()
+     User.findByIdAndUpdate(
+       req.params.id,
+       {
+         name:req.body.newData.name,
+         email:req.body.newData.email,
+         password:req.body.newData.password
+       },
+       {
+         new:true
+       },
+       (err,data)=>{
+         if(err){
+           res.json({
+             success:false,
+             message:err
+           })
+         } else if (!data){
+           Response.json({
+             success:false,
+             message:"Not Found"
+           })
+         } else {
+           res.json({
+             success:true,
+             data:data
+           })
+         }
+       }
+      
+     )
   })
   // DELETE
   .delete((req, res) => {
